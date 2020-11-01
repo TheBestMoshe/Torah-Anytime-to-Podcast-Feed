@@ -1,10 +1,48 @@
 import express from "express";
 import Podcast from "podcast";
 import Axios, { AxiosResponse } from "axios";
-import { LectureDetailsResults, SpeakerLectureResults } from "./types";
+import exphbs from "express-handlebars";
+import useragent from "express-useragent";
+
+import {
+  LectureDetailsResults,
+  SpeakerLectureResults,
+  SpeakersResults,
+} from "./types";
+import path from "path";
 
 const baseUrl = "https://to-rss-dev-pl2avrgeca-uc.a.run.app";
 const app = express();
+
+app.use("/static", express.static("public"));
+
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "../views"));
+app.engine(
+  "hbs",
+  exphbs({
+    // defaultLayout: "index",
+    extname: "hbs",
+    layoutsDir: path.join(__dirname, "../views/layouts"),
+    partialsDir: path.join(__dirname, "../views"),
+  })
+);
+
+app.use(useragent.express());
+
+app.get("/", async (req, resp) => {
+  // Get all the speakers
+  const response = await Axios.post(
+    "https://www.torahanytime.com/webservice_2.php?action=getSpeakers"
+  );
+
+  const speakerResults = response.data as SpeakersResults;
+  const speakers = speakerResults.speakers;
+
+  const useragent = req.useragent;
+  console.log(useragent);
+  resp.render("home", { speakers: speakers, useragent: useragent });
+});
 
 app.get("/speakers/:speakerId/rss", async (req, resp) => {
   const speakerId = req.params.speakerId;

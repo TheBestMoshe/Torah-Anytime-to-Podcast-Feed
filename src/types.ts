@@ -51,3 +51,17 @@ export type LectureDetailsResults = {
     videoinfo: VideoInfo;
   };
 };
+
+export type Speaker = {
+  speakername: string;
+  Lastname: string;
+  gender: "male" | "female";
+  speakerimage: string;
+  follow: boolean;
+  speakerid: string;
+  lecture: string;
+};
+
+export type SpeakersResults = {
+  speakers: Array<Speaker>;
+};

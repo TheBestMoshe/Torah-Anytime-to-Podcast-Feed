@@ -1,0 +1,30 @@
+<h1>Home page</h1>
+
+<h4>
+    Subscribe to a Speaker on Torah Anytime with your podcast app
+</h4>
+
+<p>To add a podcast to your player, copy the feed url for the lecturer and add it to your player</p>
+<p>See <a href="https://www.imore.com/how-manually-add-podcasts-apple-podcasts" target="_blank"
+        rel="noopener noreferrer">https://www.imore.com/how-manually-add-podcasts-apple-podcasts</a> for instruction for
+    some of the most popular players.</p>
+
+<div>
+    {{#each speakers}}
+    <div>
+        <img src="{{ speakerimage }}" alt="" style="width:40px">
+        {{ speakername }}
+        {{#if useragent.isiPhone }}
+        <a href="overcast://x-callback-url/add?url=/speakers/{{ speakerid }}/rss" target="_blank"
+            rel="noopener noreferrer"><img style="width:24px;" src="/static/logo.svg" /></a>
+        {{/if}}
+        <a href="/speakers/{{ speakerid }}/rss" target="_blank" rel="noopener noreferrer">
+
+            <svg style="width:24px;height:24px;color:green" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z" />
+            </svg></a>
+
+    </div>
+    {{/each}}
+</div>
