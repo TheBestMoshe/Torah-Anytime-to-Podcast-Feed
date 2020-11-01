@@ -66,7 +66,7 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
     const lectureDetails = lectureDetailResults.VideoInfo.videoinfo[0];
     feed.addItem({
       title: lectureDetails.title,
-      url: "",
+      url: lectureDetails.AudioUrl,
       guid: lectureDetails.ID,
       categories: [lectureDetails.category],
       date: lectureDetails.date,
