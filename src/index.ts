@@ -3,6 +3,7 @@ import Podcast from "podcast";
 import Axios, { AxiosResponse } from "axios";
 import { LectureDetailsResults, SpeakerLectureResults } from "./types";
 
+const baseUrl = "https://to-rss-dev-pl2avrgeca-uc.a.run.app";
 const app = express();
 
 app.get("/speakers/:speakerId/rss", async (req, resp) => {
@@ -15,28 +16,21 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
     "https://www.torahanytime.com/webservice_2.php?action=getSpeakerDetail",
     {
       language: [7, 1, 14, 10, 15, 12, 5, 11, 3, 16, 4, 8, 9, 13],
-      limit: 10,
+      limit: 50,
       speakerid: speakerId,
       userid: 1,
     }
   ).catch((e) => console.log(e));
 
-  //   console.log(response.status);
-
-  //   console.log(response.statusText);
   const speakerLectureResults = response.data as SpeakerLectureResults;
-  console.log(speakerLectureResults);
-  // console.log(speakerLectureResults.SpeakerVideoDetail.speakerDetail.);
-
   const speakerDetails = speakerLectureResults.SpeakeVideoDetail.speakerDetail;
   const feed = new Podcast({
     title: speakerDetails.speakerName,
-    description: speakerDetails.description,
-    feedUrl: "",
-    siteUrl: "",
+    description: `${speakerDetails.speakerName} is a lecturer on Torah Anytime`,
+    feedUrl: `${baseUrl}/speakers/${speakerId}/rss`,
+    siteUrl: `https://www.torahanytime.com/#/speaker?l=${speakerId}`,
     imageUrl: speakerDetails.speakerimage,
     author: speakerDetails.speakerName,
-    // language: "",
     // categories: [],
     // pubDate: "",
     ttl: 60,
@@ -71,6 +65,10 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
       categories: [lectureDetails.category],
       date: lectureDetails.date,
       author: lectureDetails.speakername,
+      enclosure: {
+        url: lectureDetails.AudioUrl,
+        type: "audio/mpeg",
+      },
     });
   });
 
