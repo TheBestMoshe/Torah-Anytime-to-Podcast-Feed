@@ -3,7 +3,7 @@ export type Lecture = {
   imagepath: string;
   playerimage: string;
   speakername: string;
-  data: string;
+  date: string;
   category: string;
   language: string;
   length: string;

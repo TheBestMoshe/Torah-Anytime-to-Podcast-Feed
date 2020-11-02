@@ -8,17 +8,22 @@
 <p>See <a href="https://www.imore.com/how-manually-add-podcasts-apple-podcasts" target="_blank"
         rel="noopener noreferrer">https://www.imore.com/how-manually-add-podcasts-apple-podcasts</a> for instruction for
     some of the most popular players.</p>
+<p>The 50 most recent shiurim will be added.</p>
 
 <div>
     {{#each speakers}}
-    <div>
-        <img src="{{ speakerimage }}" alt="" style="width:40px">
-        {{ speakername }}
+    <div class="speaker-container">
+        <a href="/speakers/{{ speakerid }}">
+            <img class="speaker-image" src="{{ speakerimage }}" alt="" style="width:40px">
+            <div class="speaker-name">{{ speakername }}</div>
+            <div class="speaker-lecture-count">{{ lecture }} lectures</div>
+
+        </a>
         {{#if useragent.isiPhone }}
         <a href="overcast://x-callback-url/add?url=/speakers/{{ speakerid }}/rss" target="_blank"
             rel="noopener noreferrer"><img style="width:24px;" src="/static/logo.svg" /></a>
         {{/if}}
-        <a href="/speakers/{{ speakerid }}/rss" target="_blank" rel="noopener noreferrer">
+        <a class="rss-feed-link" href="/speakers/{{ speakerid }}/rss" target="_blank" rel="noopener noreferrer">
 
             <svg style="width:24px;height:24px;color:green" viewBox="0 0 24 24">
                 <path fill="currentColor"

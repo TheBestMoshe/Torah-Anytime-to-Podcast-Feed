@@ -44,6 +44,25 @@ app.get("/", async (req, resp) => {
   resp.render("home", { speakers: speakers, useragent: useragent });
 });
 
+app.get("/speakers/:speakerId", async (req, resp) => {
+  const speakerId = req.params.speakerId;
+  const response = await Axios.post(
+    "https://www.torahanytime.com/webservice_2.php?action=getSpeakerDetail",
+    {
+      language: [7, 1, 14, 10, 15, 12, 5, 11, 3, 16, 4, 8, 9, 13],
+      limit: 50,
+      speakerid: speakerId,
+      userid: 1,
+    }
+  );
+
+  const speakerLectureResults = response.data as SpeakerLectureResults;
+  const speakerDetails = speakerLectureResults.SpeakeVideoDetail.speakerDetail;
+  const lectures = speakerLectureResults.SpeakeVideoDetail.speakerVideoList;
+
+  resp.render("speakerPage", { speaker: speakerDetails, lectures: lectures });
+});
+
 app.get("/speakers/:speakerId/rss", async (req, resp) => {
   const speakerId = req.params.speakerId;
 
