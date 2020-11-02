@@ -41,7 +41,9 @@ app.get("/", async (req, resp) => {
 
   const useragent = req.useragent;
   console.log(useragent);
-  resp.render("home", { speakers: speakers, useragent: useragent });
+  resp
+    .set("Cache-Control", "public, max-age=3600")
+    .render("home", { speakers: speakers, useragent: useragent });
 });
 
 app.get("/speakers/:speakerId", async (req, resp) => {
@@ -60,7 +62,9 @@ app.get("/speakers/:speakerId", async (req, resp) => {
   const speakerDetails = speakerLectureResults.SpeakeVideoDetail.speakerDetail;
   const lectures = speakerLectureResults.SpeakeVideoDetail.speakerVideoList;
 
-  resp.render("speakerPage", { speaker: speakerDetails, lectures: lectures });
+  resp
+    .set("Cache-Control", "public, max-age=3600")
+    .render("speakerPage", { speaker: speakerDetails, lectures: lectures });
 });
 
 app.get("/speakers/:speakerId/rss", async (req, resp) => {
@@ -131,7 +135,10 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
   });
 
   const xml = feed.buildXml();
-  resp.type("application/xml").send(xml);
+  resp
+    .set("Cache-Control", "public, max-age=18000")
+    .type("application/xml")
+    .send(xml);
 });
 
 const port = process.env.PORT || 8080;
