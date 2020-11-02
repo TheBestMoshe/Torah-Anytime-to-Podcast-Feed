@@ -88,6 +88,7 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
     siteUrl: `https://www.torahanytime.com/#/speaker?l=${speakerId}`,
     imageUrl: speakerDetails.speakerimage,
     author: speakerDetails.speakerName,
+    generator: "Torah Anytime to Podcast",
     // categories: [],
     // pubDate: "",
     ttl: 60,
