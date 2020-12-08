@@ -24,8 +24,12 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           export_default_credentials: true
 
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      
       - name: Build
-        run: gcloud builds submit --tag gcr.io/$PROJECT_ID/main_server:$GITHUB_SHA
+        run: gcloud builds submit --tag gcr.io/$PROJECT_ID/main_server:${{ steps.vars.outputs.sha_short }}
       
       - name: Deploy
-        run: gcloud run deploy $PROJECT_ID --image gcr.io/$PROJECT_ID/main_server:$GITHUB_SHA --platform managed --region $RUN_REGION --quiet
+        run: gcloud run deploy $PROJECT_ID --image gcr.io/$PROJECT_ID/main_server:${{ steps.vars.outputs.sha_short }} --platform managed --region $RUN_REGION --quiet
