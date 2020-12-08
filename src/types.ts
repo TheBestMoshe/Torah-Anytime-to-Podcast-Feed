@@ -3,7 +3,7 @@ export type Lecture = {
   imagepath: string;
   playerimage: string;
   speakername: string;
-  data: string;
+  date: string;
   category: string;
   language: string;
   length: string;
@@ -50,4 +50,18 @@ export type LectureDetailsResults = {
   VideoInfo: {
     videoinfo: VideoInfo;
   };
+};
+
+export type Speaker = {
+  speakername: string;
+  Lastname: string;
+  gender: "male" | "female";
+  speakerimage: string;
+  follow: boolean;
+  speakerid: string;
+  lecture: string;
+};
+
+export type SpeakersResults = {
+  speakers: Array<Speaker>;
 };
