@@ -3,6 +3,7 @@ import Podcast from "podcast";
 import Axios, { AxiosResponse } from "axios";
 import exphbs from "express-handlebars";
 import useragent from "express-useragent";
+import Jimp from "jimp";
 
 import {
   LectureDetailsResults,
@@ -73,11 +74,13 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
   // Get lectures
   let response: any = null;
 
+  console.debug("getting lectures");
+
   response = await Axios.post(
     "https://www.torahanytime.com/webservice_2.php?action=getSpeakerDetail",
     {
       language: [7, 1, 14, 10, 15, 12, 5, 11, 3, 16, 4, 8, 9, 13],
-      limit: 50,
+      limit: 10,
       speakerid: speakerId,
       userid: 1,
     }
@@ -90,8 +93,11 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
     description: `${speakerDetails.speakerName} is a lecturer on Torah Anytime`,
     feedUrl: `${baseUrl}/speakers/${speakerId}/rss`,
     siteUrl: `https://www.torahanytime.com/#/speaker?l=${speakerId}`,
-    imageUrl: speakerDetails.speakerimage,
+    imageUrl: `${baseUrl}/images/${encodeURIComponent(
+      speakerDetails.speakerimage
+    )}`,
     author: speakerDetails.speakerName,
+    itunesAuthor: speakerDetails.speakerName,
     generator: "Torah Anytime to Podcast",
     // categories: [],
     // pubDate: "",
@@ -102,6 +108,7 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
 
   const lectureRequests: Array<Promise<AxiosResponse<any>>> = [];
   lectures.forEach((lecture) => {
+    console.debug("getting lecture details");
     // Get the lecture
     lectureRequests.push(
       Axios.post(
@@ -111,34 +118,55 @@ app.get("/speakers/:speakerId/rss", async (req, resp) => {
           quality: "low",
           video_id: lecture.video_id,
         }
-      )
+      ).then((r) => {
+        console.log("done");
+        return r;
+      })
     );
   });
 
-  const lectureResponses = await Axios.all(lectureRequests);
+  try {
+    const lectureResponses = await Axios.all(lectureRequests);
 
-  lectureResponses.forEach((results) => {
-    const lectureDetailResults = results.data as LectureDetailsResults;
-    const lectureDetails = lectureDetailResults.VideoInfo.videoinfo[0];
-    feed.addItem({
-      title: lectureDetails.title,
-      url: lectureDetails.AudioUrl,
-      guid: lectureDetails.ID,
-      categories: [lectureDetails.category],
-      date: lectureDetails.date,
-      author: lectureDetails.speakername,
-      enclosure: {
+    lectureResponses.forEach((results) => {
+      const lectureDetailResults = results.data as LectureDetailsResults;
+      const lectureDetails = lectureDetailResults.VideoInfo.videoinfo[0];
+      feed.addItem({
+        title: lectureDetails.title,
         url: lectureDetails.AudioUrl,
-        type: "audio/mpeg",
-      },
+        guid: lectureDetails.ID,
+        categories: [lectureDetails.category],
+        date: lectureDetails.date,
+        author: lectureDetails.speakername,
+        enclosure: {
+          url: lectureDetails.AudioUrl,
+          type: "audio/mpeg",
+        },
+      });
     });
-  });
 
-  const xml = feed.buildXml();
-  resp
-    .set("Cache-Control", "public, max-age=18000")
-    .type("application/xml")
-    .send(xml);
+    const xml = feed.buildXml();
+    resp
+      .set("Cache-Control", "public, max-age=18000")
+      .type("application/xml")
+      .send(xml);
+  } catch (e) {
+    console.warn(e);
+    resp.status(500).json({ message: "internal error" });
+  }
+});
+
+app.get("/images/:url", async (req, resp) => {
+  const imageUrl = req.params.url;
+  console.log(imageUrl);
+  const image = await Jimp.read(imageUrl);
+  image.scaleToFit(1500, 1500);
+
+  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+  image.print(font, 500, 900, "Torah Anytime to Podcast");
+
+  const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
+  resp.set("Content-Type", Jimp.MIME_JPEG).send(buffer);
 });
 
 const port = process.env.PORT || 8080;
