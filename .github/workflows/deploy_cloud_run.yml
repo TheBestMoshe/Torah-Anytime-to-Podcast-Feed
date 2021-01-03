@@ -39,6 +39,10 @@ jobs:
           .
         working-directory: ./app
 
+      - name: Push to Container Registry
+        run: >
+          docker push gcr.io/$PROJECT_ID/main_server
+
   deploy:
     needs: [build]
     name: Deploy new container
