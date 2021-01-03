@@ -36,6 +36,7 @@ jobs:
           docker build
           --tag gcr.io/$PROJECT_ID/main_server:${{ steps.vars.outputs.sha_short }}
           --tag gcr.io/$PROJECT_ID/main_server:latest
+          .
         working-directory: ./app
 
   deploy:
