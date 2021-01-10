@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "app/**"
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
