@@ -1,11 +1,5 @@
-# Torah-Anytime-to-Podcast-Feed
+# Torah Anytime to Podcast
 
 ## Convert a speaker on Torah Anytime to a podcast RSS feed
 
-Add a speaker as a podcast rss feed
-
-### Designed to be used with Google Cloud Run
-
-Requires the [Visual Studio Code Cloud Code extension](https://cloud.google.com/code/docs/vscode/install).
-
-To run with the Cloud Run local emulator press `cmd + shift + p` and enter `Cloud Code: Run on Cloud Run Emulator`. Follow the onscreen setup instructions.
+Displays a page which lists all Torah Anytime speakers, with a url to add to a podcast player of your choice. The URL generates a valid rss feed which can be be parsed by any podcast player.
