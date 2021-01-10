@@ -1,4 +1,9 @@
 <h1 class="speaker-name">{{ speaker.speakerName  }}</h1>
+<h4>
+    <a target="blank" href="https://www.torahanytime.com/#/speaker?l={{ speaker.speakerid }}">
+        View {{ speaker.speakerName  }}'s page on TorahAnytime
+    </a>
+</h4>
 <div class="speaker-image"><img src="{{ speaker.speakerimage }}" alt=""></div>
 <div class="feed-links">
     <a class="rss-feed-link" href="/speakers/{{ speaker.speakerid }}/rss" target="_blank" rel="noopener noreferrer">
@@ -13,6 +18,12 @@
     <div class="lecture">
         <h4>{{ lectureTitle }}</h4>
         <div>{{ date  }}</div>
+        <div class="play-links">
+            <span class="watch-link"><a href="https://www.torahanytime.com/#/lectures?v={{ video_id }}"
+                    target="blank">Watch</a></span>
+            <span class="listen-link"><a href="https://www.torahanytime.com/#/lectures?a={{ video_id }}"
+                    target="blank">Listen</a></span>
+        </div>
     </div>
     {{/each}}
 </div>
