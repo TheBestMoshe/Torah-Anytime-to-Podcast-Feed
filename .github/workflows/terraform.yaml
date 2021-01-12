@@ -45,8 +45,8 @@ jobs:
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
-        # env:
-        #   GOOGLE_CREDENTIALS: ${{ env.SA_KEY_JSON }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ env.SA_KEY_JSON }}
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
@@ -78,5 +78,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply -auto-approve
-        # env:
-        #   GOOGLE_CREDENTIALS: ${{ env.SA_KEY_JSON }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ env.SA_KEY_JSON }}
