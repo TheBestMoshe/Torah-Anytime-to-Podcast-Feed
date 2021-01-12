@@ -5,8 +5,8 @@ on:
     branches:
       - master
     pull_request:
-    paths:
-      - "terraform/**"
+    # paths:
+    #   - "terraform/**"
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
