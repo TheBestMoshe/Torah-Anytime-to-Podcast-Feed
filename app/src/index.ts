@@ -12,7 +12,7 @@ import {
 } from "./types";
 import path from "path";
 
-const baseUrl = "https://to-rss-dev-pl2avrgeca-uc.a.run.app";
+const baseUrl = "https://torahanytimetopodcast.2159295.xyz";
 const app = express();
 
 app.use("/static", express.static("public"));
